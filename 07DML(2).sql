@@ -1,0 +1,7 @@
+DROP TABLE EMPS;
+
+-- 데이터 복사
+CREATE TABLE EMPS AS (SELECT * FROM employees);
+
+-- 구조복사
+CREATE TABLE EMPS AS (SELECT * FROM employees WHERE 1 = 2 ); 

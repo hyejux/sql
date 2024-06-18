@@ -65,27 +65,72 @@ ON A.DEPARTMENT_ID = D.DEPARTMENT_ID;
 --한트) 부서의 인원수 먼저 구한다. 이 테이블을 조인한다.
 
 
-
-
-
-SELECT department_name, rownum RN,
-        A.*
-FROM (SELECT count(*) 사람
-FROM departments ORDER BY 사람 ) A;
-
-
-
-
-
-
-
-
+SELECT *
+FROM (SELECT COUNT(*) AS 사원수,
+            DEPARTMENT_ID
+        FROM EMPLOYEES
+        GROUP BY DEPARTMENT_ID) E
+LEFT JOIN DEPARTMENTS D
+ON d.department_id = E.department_id;
 
 --
 --문제15
 --부서에 모든 컬럼, 주소, 우편번호, 부서별 평균 연봉을 구해서 출력하세요.
 --조건) 부서별 평균이 없으면 0으로 출력하세요
+
+
+-- 조인 depart 에 
+
+SELECT D.*, l.street_address, l.postal_code, A.평균연봉
+FROM departments d
+JOIN  (SELECT NVL(TRUNC(AVG(salary)),0) AS 평균연봉, department_id
+        FROM employees 
+        GROUP BY department_id) A
+ON d.department_id = A.department_id
+LEFT JOIN locations l
+on d.location_id = l.location_id;
+
+
+
+SELECT AVG(e.salary) FROM employees e
+JOIN departments d
+ON e.department_id = d.department_id;
+
+
+
+SELECT l.street_address , l.postal_code
+    FROM (SELECT TRUNC(AVG(salary))
+        FROM employees
+        GROUP BY department_id);
+
+
+
+
+
+
+
+
 --
 --문제16
 --문제 15결과에 대해 DEPARTMENT_ID기준으로 내림차순 정렬해서 ROWNUM을 붙여 1-10데이터 까지만
 --출력하세요
+
+SELECT *
+FROM (SELECT rownum RN, department_ID, department_name, manager_id, location_id, postal_code, 평균연봉
+FROM  (SELECT D.*, l.street_address, l.postal_code, A.평균연봉
+    FROM departments d
+    JOIN  (SELECT NVL(TRUNC(AVG(salary)),0) AS 평균연봉, department_id
+            FROM employees 
+            GROUP BY department_id) A
+    ON d.department_id = A.department_id
+    LEFT JOIN locations l
+    ON d.location_id = l.location_id
+    ORDER BY d.department_id DESC))
+    C
+WHERE RN BETWEEN 1 AND 10;
+    
+
+
+
+
+

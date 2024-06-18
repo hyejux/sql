@@ -1,0 +1,35 @@
+--트랜잭션
+
+-- 오직 DML 문에 대해서만 트랜잭션을 수행할 수 있습니다 ^^
+
+
+SHOW AUTOCOMMIT;
+
+SET AUTOCOMMIT ON;
+
+SET AUTOCOMMIT OFF;
+
+SELECT * FROM DEPTS;
+
+DELETE FROM DEPTS WHERE DEPARTMENT_ID = 10;
+
+
+SAVEPOINT DEPT10; --------------------- SAVE POINT 
+
+DELETE FROM DEPTS WHERE DEPARTMENT_ID = 20;
+
+SAVEPOINT DEPT20; --------------------------
+
+DELETE FROM DEPTS WHERE DEPARTMENT_ID = 30;
+
+ROLLBACK TO DEPT20; -- 마지막 커밋 이후로 돌아감
+
+SELECT * FROM DEPTS;
+
+ROLLBACK TO DEPT10;
+
+
+
+
+-- 트랜잭션 4원칙
+
